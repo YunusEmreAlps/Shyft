@@ -86,7 +86,7 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "get all shift schedules",
+                "description": "get all shift schedules with pagination, search, sort and filter options",
                 "consumes": [
                     "application/json"
                 ],
@@ -96,22 +96,169 @@
                 "tags": [
                     "Shift"
                 ],
-                "summary": "get all shift schedules",
+                "summary": "get all shift schedules with filters",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search in alias, description, organization, manager",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "created_at",
+                        "description": "Sort by field (alias, year, start_date, end_date, status, organization_name, manager_name)",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "DESC",
+                        "description": "Sort order (ASC or DESC)",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter only active records (not deleted)",
+                        "name": "active",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by status (0:pending, 1:approved, 2:rejected)",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by year",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by start date (YYYY-MM-DD)",
+                        "name": "start_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by end date (YYYY-MM-DD)",
+                        "name": "end_date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by organization name",
+                        "name": "organization_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by organization mail",
+                        "name": "organization_mail",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by organization phone",
+                        "name": "organization_phone",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by manager name",
+                        "name": "manager_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by manager mail",
+                        "name": "manager_mail",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by manager phone",
+                        "name": "manager_phone",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by user ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by user name",
+                        "name": "user_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by user mail",
+                        "name": "user_mail",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by user phone",
+                        "name": "user_phone",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by shift ID",
+                        "name": "shift_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by shift start (YYYY-MM-DD HH:MM:SS)",
+                        "name": "shift_start",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by shift end (YYYY-MM-DD HH:MM:SS)",
+                        "name": "shift_end",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by shift user",
+                        "name": "shift_user",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "get all shift schedules successfully",
                         "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
+                            "$ref": "#/definitions/models.ShiftScheduleListResponse"
                         }
                     },
                     "400": {
-                        "description": "cannot get all shift schedules due to invalid request body",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
-                        }
-                    },
-                    "422": {
-                        "description": "cannot get all shift schedules due to invalid request body",
+                        "description": "cannot get all shift schedules due to invalid request parameters",
                         "schema": {
                             "$ref": "#/definitions/handlers.RespondJson"
                         }
@@ -373,72 +520,6 @@
                     },
                     "500": {
                         "description": "cannot get shift schedule by id due to internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/shift-schedules/paginated": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "get all shift schedules with pagination",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Shift"
-                ],
-                "summary": "get all shift schedules with pagination",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "size",
-                        "name": "size",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "orderBy",
-                        "name": "orderBy",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get all shift schedules successfully",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
-                        }
-                    },
-                    "400": {
-                        "description": "cannot get shift schedules  with pagination due to invalid request body",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
-                        }
-                    },
-                    "422": {
-                        "description": "cannot get shift schedules  with pagination due to invalid request body",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.RespondJson"
-                        }
-                    },
-                    "500": {
-                        "description": "cannot get shift schedules  with pagination due to internal server error",
                         "schema": {
                             "$ref": "#/definitions/handlers.RespondJson"
                         }
@@ -793,6 +874,88 @@
                     "items": {}
                 },
                 "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ShiftSchedule": {
+            "type": "object",
+            "properties": {
+                "CreatedAt": {
+                    "type": "string"
+                },
+                "ID": {
+                    "type": "integer"
+                },
+                "UpdatedAt": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "frequency": {
+                    "description": "1, 2, 3, 4, 5, 6, 7 (days of the week)",
+                    "type": "integer"
+                },
+                "manager": {
+                    "type": "array",
+                    "items": {}
+                },
+                "organization": {
+                    "type": "array",
+                    "items": {}
+                },
+                "shifts": {
+                    "type": "array",
+                    "items": {}
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "0: pending, 1: approved, 2: rejected",
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {}
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ShiftScheduleListResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ShiftSchedule"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                },
+                "sort_by": {
+                    "type": "string"
+                },
+                "sort_order": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
                     "type": "integer"
                 }
             }

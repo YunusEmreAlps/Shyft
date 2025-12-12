@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"shift-scheduler-service/config"
+	"shift-scheduler-service/pkg/logger"
 	"shift-scheduler-service/pkg/metric"
 
 	"github.com/gin-contrib/cache/persistence"
@@ -69,9 +69,10 @@ func (bs *ShiftService) InitRouter(r *gin.Engine) {
 	// Prometheus metrics
 	metrics, err := metric.CreateMetrics(config.C.Metric.Url, config.C.Metric.Service)
 	if err != nil {
-		fmt.Println("INIT: Cannot create metrics")
+		logger.CLogger.Warn("Cannot create metrics: ", err)
+	} else {
+		logger.CLogger.Infof("Metrics server running. Metrics: %+v", metrics)
 	}
-	fmt.Println("INIT: Application configuration success.", metrics)
 
 	// -- my service routes (group)
 	v1 := r.Group(API_PREFIX)
@@ -87,12 +88,6 @@ func (bs *ShiftService) InitRouter(r *gin.Engine) {
 	v1.GET("/shift-schedules/:id", func(ctx *gin.Context) {
 		code, data, err := bs.HandleGetShiftScheduleByID(ctx)
 		respondJson(ctx, code, RN_PREFIX+"/shift-schedules/:id", data, err)
-	})
-
-	// Get shift schedule with pagination
-	v1.GET("/shift-schedules/paginated", func(ctx *gin.Context) {
-		code, data, err := bs.HandleGetShiftSchedulesWithPagination(ctx)
-		respondJson(ctx, code, RN_PREFIX+"/shift-schedules/pagination", data, err)
 	})
 
 	// Get shift schedule by year

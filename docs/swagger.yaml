@@ -50,6 +50,62 @@ definitions:
     - users
     - year
     type: object
+  models.ShiftSchedule:
+    properties:
+      CreatedAt:
+        type: string
+      ID:
+        type: integer
+      UpdatedAt:
+        type: string
+      alias:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      frequency:
+        description: 1, 2, 3, 4, 5, 6, 7 (days of the week)
+        type: integer
+      manager:
+        items: {}
+        type: array
+      organization:
+        items: {}
+        type: array
+      shifts:
+        items: {}
+        type: array
+      start_date:
+        type: string
+      status:
+        description: '0: pending, 1: approved, 2: rejected'
+        type: integer
+      users:
+        items: {}
+        type: array
+      year:
+        type: integer
+    type: object
+  models.ShiftScheduleListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.ShiftSchedule'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      sort_by:
+        type: string
+      sort_order:
+        type: string
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
 info:
   contact:
     email: YunusAlpu@icloud.com
@@ -103,20 +159,122 @@ paths:
     get:
       consumes:
       - application/json
-      description: get all shift schedules
+      description: get all shift schedules with pagination, search, sort and filter
+        options
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        maximum: 100
+        minimum: 1
+        name: page_size
+        type: integer
+      - description: Search in alias, description, organization, manager
+        in: query
+        name: search
+        type: string
+      - default: created_at
+        description: Sort by field (alias, year, start_date, end_date, status, organization_name,
+          manager_name)
+        in: query
+        name: sort_by
+        type: string
+      - default: DESC
+        description: Sort order (ASC or DESC)
+        in: query
+        name: sort_order
+        type: string
+      - description: Filter only active records (not deleted)
+        in: query
+        name: active
+        type: boolean
+      - description: Filter by status (0:pending, 1:approved, 2:rejected)
+        in: query
+        name: status
+        type: integer
+      - description: Filter by year
+        in: query
+        name: year
+        type: integer
+      - description: Filter by start date (YYYY-MM-DD)
+        in: query
+        name: start_date
+        type: string
+      - description: Filter by end date (YYYY-MM-DD)
+        in: query
+        name: end_date
+        type: string
+      - description: Filter by organization name
+        in: query
+        name: organization_name
+        type: string
+      - description: Filter by organization mail
+        in: query
+        name: organization_mail
+        type: string
+      - description: Filter by organization phone
+        in: query
+        name: organization_phone
+        type: string
+      - description: Filter by manager name
+        in: query
+        name: manager_name
+        type: string
+      - description: Filter by manager mail
+        in: query
+        name: manager_mail
+        type: string
+      - description: Filter by manager phone
+        in: query
+        name: manager_phone
+        type: string
+      - description: Filter by user ID
+        in: query
+        name: user_id
+        type: integer
+      - description: Filter by user name
+        in: query
+        name: user_name
+        type: string
+      - description: Filter by user mail
+        in: query
+        name: user_mail
+        type: string
+      - description: Filter by user phone
+        in: query
+        name: user_phone
+        type: string
+      - description: Filter by shift ID
+        in: query
+        name: shift_id
+        type: integer
+      - description: Filter by shift start (YYYY-MM-DD HH:MM:SS)
+        in: query
+        name: shift_start
+        type: string
+      - description: Filter by shift end (YYYY-MM-DD HH:MM:SS)
+        in: query
+        name: shift_end
+        type: string
+      - description: Filter by shift user
+        in: query
+        name: shift_user
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: get all shift schedules successfully
           schema:
-            $ref: '#/definitions/handlers.RespondJson'
+            $ref: '#/definitions/models.ShiftScheduleListResponse'
         "400":
-          description: cannot get all shift schedules due to invalid request body
-          schema:
-            $ref: '#/definitions/handlers.RespondJson'
-        "422":
-          description: cannot get all shift schedules due to invalid request body
+          description: cannot get all shift schedules due to invalid request parameters
           schema:
             $ref: '#/definitions/handlers.RespondJson'
         "500":
@@ -125,7 +283,7 @@ paths:
             $ref: '#/definitions/handlers.RespondJson'
       security:
       - BearerAuth: []
-      summary: get all shift schedules
+      summary: get all shift schedules with filters
       tags:
       - Shift
     post:
@@ -399,51 +557,6 @@ paths:
       security:
       - BearerAuth: []
       summary: get a shift schedule by id
-      tags:
-      - Shift
-  /shift-schedules/paginated:
-    get:
-      consumes:
-      - application/json
-      description: get all shift schedules with pagination
-      parameters:
-      - description: page
-        in: query
-        name: page
-        type: string
-      - description: size
-        in: query
-        name: size
-        type: string
-      - description: orderBy
-        in: query
-        name: orderBy
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: get all shift schedules successfully
-          schema:
-            $ref: '#/definitions/handlers.RespondJson'
-        "400":
-          description: cannot get shift schedules  with pagination due to invalid
-            request body
-          schema:
-            $ref: '#/definitions/handlers.RespondJson'
-        "422":
-          description: cannot get shift schedules  with pagination due to invalid
-            request body
-          schema:
-            $ref: '#/definitions/handlers.RespondJson'
-        "500":
-          description: cannot get shift schedules  with pagination due to internal
-            server error
-          schema:
-            $ref: '#/definitions/handlers.RespondJson'
-      security:
-      - BearerAuth: []
-      summary: get all shift schedules with pagination
       tags:
       - Shift
   /shift-schedules/week:

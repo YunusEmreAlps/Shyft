@@ -45,11 +45,16 @@ func (ss *ShiftService) HandleGetShiftScheduleByWeek(c *gin.Context) (int, inter
 	for _, shiftSchedule := range shiftSchedules {
 		//
 		temp := map[string]interface{}{
+			"id":           shiftSchedule.ID,
 			"alias":        shiftSchedule.Alias,
+			"description":  shiftSchedule.Description,
+			"frequency":    shiftSchedule.Frequency,
+			"status":       shiftSchedule.Status,
 			"week_start":   weekStart.Format(time.RFC3339),
 			"week_end":     weekEnd.Format(time.RFC3339),
 			"manager":      shiftSchedule.Manager,
 			"organization": shiftSchedule.Organization,
+			"users":        shiftSchedule.Users,
 			"shifts":       []interface{}{},
 		}
 
@@ -86,11 +91,16 @@ func (ss *ShiftService) HandleGetShiftScheduleByWeek(c *gin.Context) (int, inter
 		} else {
 			// If empty or not all departments want to be shown
 			data = append(data, map[string]interface{}{
+				"id":           shiftSchedule.ID,
 				"alias":        shiftSchedule.Alias,
+				"description":  shiftSchedule.Description,
+				"frequency":    shiftSchedule.Frequency,
+				"status":       shiftSchedule.Status,
 				"week_start":   weekStart.Format(time.RFC3339),
 				"week_end":     weekEnd.Format(time.RFC3339),
 				"organization": shiftSchedule.Organization,
 				"manager":      shiftSchedule.Manager,
+				"users":        shiftSchedule.Users,
 				"shifts":       []interface{}{},
 			})
 		}

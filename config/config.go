@@ -6,7 +6,6 @@ import (
 
 	"shift-scheduler-service/pkg/logger"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/spf13/viper"
 )
 
@@ -89,54 +88,6 @@ type Cdn struct {
 	SecretKey string `mapstructure:"secret_key"`
 }
 
-/*type config struct {
-	App struct {
-		Mode    string `mapstructure:"mode"`
-		Port    string `mapstructure:"port"`
-		Version string `mapstructure:"version"`
-		Name    string `mapstructure:"name"`
-	} `mapstructure:"app"`
-
-	Auth struct {
-		JwtPub string `mapstructure:"jwt_pub"`
-	} `mapstructure:"auth"`
-
-	DB struct {
-		Url string `mapstructure:"url"`
-	} `mapstructure:"db"`
-
-	Cache struct {
-		Url string `mapstructure:"url"`
-	} `mapstructure:"cache"`
-
-	Broker struct {
-		Url           string `mapstructure:"url"`
-		ConsumerGroup string `mapstructure:"consumer_group"`
-		Topic         string `mapstructure:"topic"`
-	} `mapstructure:"broker"`
-
-	Metrics struct {
-		Url     string `mapstructure:"url"`
-		Service string `mapstructure:"service"`
-	} `mapstructure:"metrics"`
-
-	Logger struct {
-		Development       bool   `mapstructure:"development"`
-		DisableCaller     bool   `mapstructure:"disable_caller"`
-		DisableStacktrace bool   `mapstructure:"disable_stacktrace"`
-		Encoding          string `mapstructure:"encoding"`
-		Level             string `mapstructure:"level"`
-	} `mapstructure:"logger"`
-
-	Cdn struct {
-		Endpoint  string `mapstructure:"endpoint"`
-		Region    string `mapstructure:"region"`
-		Bucket    string `mapstructure:"bucket"`
-		AccessKey string `mapstructure:"access_key"`
-		SecretKey string `mapstructure:"secret_key"`
-	} `mapstructure:"cdn"`
-}*/
-
 var C Config
 
 func ReadConfig(processCwdir string) {
@@ -147,14 +98,14 @@ func ReadConfig(processCwdir string) {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		// fmt.Println("Cannot read config file:", err)
-		logger.CLogger.Info("Cannot read config file:", err)
-	}
-
-	if err := viper.Unmarshal(&Config); err != nil {
-		logger.CLogger.Info("Cannot unmarshal config file:", err)
+		logger.CLogger.Errorf("Failed to read config file: %v", err)
 		os.Exit(1)
 	}
 
-	spew.Dump(C)
+	if err := viper.Unmarshal(&Config); err != nil {
+		logger.CLogger.Errorf("Failed to unmarshal config file: %v", err)
+		os.Exit(1)
+	}
+
+	logger.CLogger.Infof("Configuration loaded successfully from %s/config/.env.yaml", processCwdir)
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"time"
 
@@ -73,7 +72,7 @@ func main() {
 	)
 
 	if err != nil {
-		log.Fatal("cannot create tracer", err)
+		logger.CLogger.Fatalf("Cannot create tracer: %v", err)
 	}
 
 	// create application service
@@ -90,21 +89,32 @@ func main() {
 
 	opentracing.SetGlobalTracer(tracer)
 	defer closer.Close()
-	logger.CLogger.Info("Opentracing connected")
+	logger.CLogger.Info("Tracing enabled: Jaeger host=", config.C.Jaeger.Host, " service=", config.C.Jaeger.ServiceName)
+
+	logger.CLogger.Infof("Configuration loaded: service=%s mode=%s port=%s version=%s", config.C.App.Name, config.C.App.Mode, config.C.App.Port, config.C.App.Version)
+	logger.CLogger.Infof("Database connected: %s", config.C.DB.Url)
+	logger.CLogger.Infof("Cache connected: %s", config.C.Cache.Url)
+	logger.CLogger.Infof("Broker connected: %s", config.C.Broker.Url)
+	logger.CLogger.Infof("Logger initialized: level=%s encoding=%s development=%v", config.C.Logger.Level, config.C.Logger.Encoding, config.C.Logger.Development)
 
 	// run application
-	logger.CLogger.Info("INIT: Application " + APP_NAME + " started on port " + port)
-	logger.CLogger.Info(router.Run(":" + port))
+	logger.CLogger.Infof("Application %s started on port %s", APP_NAME, port)
+	if gin.Mode() == gin.DebugMode {
+		logger.CLogger.Warn("Running in debug mode. Set GIN_MODE=release for production.")
+	}
+	if err := router.Run(":" + port); err != nil {
+		logger.CLogger.Fatalf("Failed to start server: %v", err)
+	}
 }
 
 // Initialize Application
 func init() {
 	isConfigSuccess = configureApplication()
 	if !isConfigSuccess {
-		logger.CLogger.Error("INIT: Application configuration failed.")
+		logger.CLogger.Error("Application configuration failed.")
 		os.Exit(1)
 	} else {
-		logger.CLogger.Info("INIT: Application configuration success.")
+		logger.CLogger.Info("Application configuration loaded successfully.")
 	}
 }
 
