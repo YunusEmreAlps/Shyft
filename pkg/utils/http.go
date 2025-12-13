@@ -9,8 +9,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"shift-scheduler-service/config"
-	"shift-scheduler-service/pkg/sanitize"
+	"shyft/config"
+	"shyft/pkg/sanitize"
 )
 
 // Get request id from echo context

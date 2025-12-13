@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"shift-scheduler-service/internal/models"
+	"shyft/internal/models"
 	"time"
 
 	"gorm.io/gorm"

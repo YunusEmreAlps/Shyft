@@ -3,9 +3,9 @@ package handlers
 import (
 	"context"
 	"net/http"
-	"shift-scheduler-service/config"
-	"shift-scheduler-service/pkg/logger"
-	"shift-scheduler-service/pkg/metric"
+	"shyft/config"
+	"shyft/pkg/logger"
+	"shyft/pkg/metric"
 
 	"github.com/gin-contrib/cache/persistence"
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	API_PREFIX = "/shift-scheduler-service"
+	API_PREFIX = "/shyft"
 	RN_PREFIX  = "cld:::shiftservice:::"
 )
 
@@ -142,7 +142,8 @@ func (bs *ShiftService) InitRouter(r *gin.Engine) {
 	health.GET("", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"status":  true,
-			"message": "Shift Scheduler Service " + config.C.App.Version + " is running on port " + config.C.App.Port + ".",
+			"message": "Version " + config.C.App.Version + " is running on port " + config.C.App.Port + ".",
+			"info":    "Service is healthy and operational.",
 		})
 	})
 }

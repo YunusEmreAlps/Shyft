@@ -2,7 +2,7 @@ package aws
 
 import (
 	"log"
-	"shift-scheduler-service/internal/models"
+	"shyft/internal/models"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"

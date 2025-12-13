@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"shift-scheduler-service/internal/models"
+	"shyft/internal/models"
 )
 
 // HandleGetShiftScheduleByYear godoc

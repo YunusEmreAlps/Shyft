@@ -13,7 +13,7 @@
         },
         "version": "1.0.0"
     },
-    "basePath": "/shift-scheduler-service",
+    "basePath": "/shyft",
     "paths": {
         "/shift-schedule/{id}": {
             "put": {

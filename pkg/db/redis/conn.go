@@ -2,8 +2,8 @@ package redis
 
 import (
 	"context"
-	"shift-scheduler-service/pkg/logger"
-	"shift-scheduler-service/pkg/utils"
+	"shyft/pkg/logger"
+	"shyft/pkg/utils"
 	"strconv"
 	"time"
 

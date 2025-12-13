@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"shift-scheduler-service/internal/models"
+	"shyft/internal/models"
 	"strings"
 	"time"
 )

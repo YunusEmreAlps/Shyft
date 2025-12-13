@@ -1,4 +1,4 @@
-module shift-scheduler-service
+module shyft
 
 go 1.21.4 // this is the version of go that we are using for this project
 

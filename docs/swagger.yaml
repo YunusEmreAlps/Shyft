@@ -1,4 +1,4 @@
-basePath: /shift-scheduler-service
+basePath: /shyft
 definitions:
   handlers.RespondJson:
     properties:

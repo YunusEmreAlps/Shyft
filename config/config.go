@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"shift-scheduler-service/pkg/logger"
+	"shyft/pkg/logger"
 
 	"github.com/spf13/viper"
 )

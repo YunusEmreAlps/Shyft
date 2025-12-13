@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	docs "shift-scheduler-service/docs"
+	docs "shyft/docs"
 
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,11 +17,11 @@ import (
 	jaegerlog "github.com/uber/jaeger-client-go/log"
 	"github.com/uber/jaeger-lib/metrics"
 
-	"shift-scheduler-service/config"
-	"shift-scheduler-service/internal/handlers"
-	"shift-scheduler-service/pkg/db/postgres"
-	"shift-scheduler-service/pkg/db/redis"
-	"shift-scheduler-service/pkg/logger"
+	"shyft/config"
+	"shyft/internal/handlers"
+	"shyft/pkg/db/postgres"
+	"shyft/pkg/db/redis"
+	"shyft/pkg/logger"
 )
 
 // @title Shift Scheduler Service API
@@ -33,15 +33,15 @@ import (
 // @contact.url    https://yunusemrealpu.netlify.app
 // @contact.email  YunusAlpu@icloud.com
 
-// @BasePath /shift-scheduler-service
+// @BasePath /shyft
 
 var isConfigSuccess = false
 
 // var equals string = strings.Repeat("=", 50)
 
-// APP_NAME = "localhost:9097/shift-scheduler-service/"
+// APP_NAME = "localhost:9097/shyft/"
 const (
-	APP_NAME = "shift-scheduler-service"
+	APP_NAME = "shyft"
 )
 
 func main() {
@@ -144,7 +144,7 @@ func setApplicationMode(md string, router *gin.Engine) {
 	// check env and set swagger
 	if !(md == "prod" || md == "production") {
 		docs.SwaggerInfo.BasePath = handlers.API_PREFIX
-		// Endpoint for swagger: http://localhost:9097/shift-scheduler-service/swagger/index.html
+		// Endpoint for swagger: http://localhost:9097/shyft/swagger/index.html
 		router.GET(handlers.API_PREFIX+"/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 }

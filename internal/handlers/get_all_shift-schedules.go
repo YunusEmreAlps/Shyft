@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"shift-scheduler-service/internal/models"
-	"shift-scheduler-service/internal/repository"
-	"shift-scheduler-service/pkg/httpErrors"
+	"shyft/internal/models"
+	"shyft/internal/repository"
+	"shyft/pkg/httpErrors"
 )
 
 // HandleGetAllShiftSchedules godoc

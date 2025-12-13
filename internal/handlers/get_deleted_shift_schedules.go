@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 
-	"shift-scheduler-service/internal/models"
-	"shift-scheduler-service/pkg/httpErrors"
+	"shyft/internal/models"
+	"shyft/pkg/httpErrors"
 )
 
 // HandleGetOnlyDeletedShiftSchedules godoc

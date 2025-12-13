@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"shift-scheduler-service/internal/models"
+	"shyft/internal/models"
 )
 
 // HandleGetShiftScheduleByWeek godoc

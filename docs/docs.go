@@ -971,7 +971,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.0",
 	Host:             "",
-	BasePath:         "/shift-scheduler-service",
+	BasePath:         "/shyft",
 	Schemes:          []string{"http", "https"},
 	Title:            "Shift Scheduler Service API",
 	Description:      "",
